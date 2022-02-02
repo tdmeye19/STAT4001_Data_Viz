@@ -1,0 +1,78 @@
+---
+title: "Quiz02_Meyer"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+“All work presented is my own, and I have followed all rules for collaboration.”
+
+Trent Meyer
+
+```{r}
+library(tidyverse)
+library(readxl)
+df <- read_excel("data/slu_graduates_17_21.xlsx")
+
+## fixes error in the data
+df <- df %>% mutate(across(everything(),
+                           .fns = ~replace(., . ==  "STATS" , "STAT")))
+```
+
+# Question 1: Make the following chart that shows the “other” majors of each STAT major student in the data set. 
+
+```{r}
+quiz_df <- df %>% filter(major1 == "STAT" | major2 == "STAT" | major3 == "STAT") %>%
+  pivot_longer(c(3:8), 
+               names_to = "type",
+               values_to = "discipline") %>%
+  filter(type == "major1" | type == "major2" | type == "major3") %>%
+  filter(!is.na(discipline) & discipline != "STAT") %>%
+  group_by(discipline) %>%
+  summarise(nstudents = n()) %>%
+  arrange(desc(nstudents)) %>%
+  mutate(discipline = fct_reorder(discipline, nstudents))
+  
+df_stat <- df %>% pivot_longer(c(3:8),
+                    values_to = "discipline",
+                    names_to = "type") %>%
+  filter(discipline == "STAT")
+semi_join(df, df_stat, by = "adm_id")
+
+ggplot(data = quiz_df, aes(x = discipline, y = nstudents)) +
+  geom_col() + 
+  coord_flip()
+```
+
+# Question 2: Make the following lollipop graphic, which investigates the sex disparity of majors at SLU with 50 or more total graduates in the past few years. The y-axis is the major while the x-axis is the proportion of majors who identified as Female. Note that the graph shown below eliminates some of the majors because I want you to discover the final trends on your own! Remember that your graphic should only include all of the majors with 50 or more total graduates.
+
+```{r}
+question2_df <- df %>% select (1:8) %>%
+  pivot_longer(c(3:8),
+                    values_to = "discipline",
+                    names_to = "type") %>%
+  filter(type == "major1" | type == "major2" | type == "major3") %>%
+  filter(!is.na(discipline)) %>% 
+  group_by(sex, discipline) %>%
+  summarise(nstudents = n()) %>%
+  ungroup() %>%
+  group_by(discipline) %>%
+  mutate(ntotal = sum(nstudents),
+         femaleprop = nstudents / ntotal) %>%
+  filter(nstudents >= 50,
+         sex == "F") %>%
+  ungroup() %>%
+  arrange(desc(femaleprop)) %>%
+  mutate(discipline = fct_reorder(discipline, femaleprop))
+  
+
+ggplot(data = question2_df, aes(x = discipline, y = femaleprop)) +
+  geom_point() +
+  geom_segment(aes(x=discipline, xend=discipline, y=0, yend=femaleprop)) +
+  coord_flip() +
+  labs(x = "discipline",
+       y = "Proportion of Female Majors in Past Five Years")
+```
+

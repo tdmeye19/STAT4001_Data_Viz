@@ -1,0 +1,86 @@
+---
+title: "Quiz1_InClass_Meyer"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+“All work presented is my own. I have not communicated with or worked with anyone else on this quiz.”
+
+Trent Meyer
+
+# Question 1
+```{r}
+library(tidyverse)
+category <- rep(c("Group 1", "Group 2", "Group 3", "Group 4", "Group 5"), 7)
+time <- rep(c(2000, 2001, 2002, 2003, 2004, 2005, 2006), each = 5) 
+response <- rpois(length(category), 30)
+df <- tibble(category, time, response)
+ggplot(data = df, aes(x = time, y = response)) +
+  geom_col(aes(fill = category)) +
+  labs(y = "count")
+```
+
+For which category is it easiest to see the overall trend in the count? Use terminology from our course reading to give a one sentence reason for your selection.
+
+It is easiest to see the overall trend for Group 5, because they have a stable baseline that allows for relative comparing.
+
+# Question 2 
+
+Take the chart from Question 1 and use faceting to display the data from df in each group instead of colour.
+
+```{r}
+ggplot(data = df, aes(x = time, y = response)) +
+  geom_col() +
+  labs(y = "count") + 
+  facet_wrap(~category)
+```
+
+# Question 3a
+
+Suppose that we want to make a map of the United States, and colour each state by the percent change in Covid cases this week compared to last week. States with an increase would have a positive percent change while states with a decrease would have a negative percent change. Should we use a sequential, diverging, or unordered colour scale to colour the states? Give a one phrase or one sentence explanation.
+
+We should use a diverging scale because the midpoint would be 0% change, with an increase colored on the right, and a decrease colored on the left.
+
+# Question 3b
+
+Suppose that, in our map, we now want to colour the states by the number of covid cases per 100,000 people. Should we use a sequential, diverging, or unordered colour scale to colour the states? Give a one phrase or one sentence explanation.
+
+We should use a sequential color scale to colour the states because the darker color the state has would correspond to more covid cases, and vice-versa.
+
+# Question 4
+
+```{r}
+ggplot(data = df, aes(x = time, y = response)) +
+  geom_col(aes(fill = category)) +
+  coord_flip()
+```
+
+Which of the parameters in the Grammar of Graphics are explicitly specified or changed in the following plot:
+
+Data, Mappings, Geom_Function, Coord_Function, Position.
+
+# Question 5a
+
+What would you need to change in the code below so that the points are all coloured blue? Make the change and then give a one sentence explanation of why you need to make that change.
+
+```{r}
+ggplot(data = df, aes(x = time, y = response)) +
+  geom_point(colour = "blue")
+```
+
+You would need to take the colour = "blue" out of the aesthetic function.
+
+# Question 5b
+
+What would you need to change in the code below to only have a single smoother for an overall trend (instead of one smoother for each category)? Make the change and then give a one sentence explanation of why you need to make that change.
+
+```{r}
+ggplot(data = df, aes(x = time, y = response)) +
+  geom_point(aes(colour = category)) +
+  geom_smooth(se = FALSE, span = 1.9)
+```
+
+You would need to take the colour = category out of the global options, and put it into the local geom_point options.

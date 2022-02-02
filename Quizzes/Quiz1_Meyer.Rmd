@@ -1,0 +1,46 @@
+---
+title: "Quiz1_Meyer"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+“All work presented is my own, and I have followed all rules for collaboration.”
+
+Trent Meyer
+
+# 3.3 Data Visualization Concepts: Part 2
+
+1. What is the difference between a colour’s hue and a colour’s intensity?
+
+A colour's hue is simply the color, or wavelength of the light being reflected, while a colour's intensity is the vividness of the color, which can often be compared numerically.
+
+2. Think of an example where you would want to use a sequential colour scale that’s different from the one given in the text. Then, think of examples where you would use a diverging colour scale and an unordered colour scale.
+
+One example where you would want to use a sequential colour scale is with population density, or number of COVID cases in an area. One example where you would want to use a diverging colour scale is with the pH scale. One example where you would want to use an unordered colour scale is when you might be looking at which countries have which leadership style, which each different colour being a different leadership style.
+
+3. Some gestalt inferences take priority over others. Using Figure 1.21, give an example of a gestalt inference that takes priority over another one.
+
+In Figure 1.21, in the upper right corner, there is an example where similar color takes priority over proximity. The blue circles are grouped first, rather than grouping by row.
+
+4. “Bar charts are better than Pie charts for visualizing a single categorical variable.” Explain how results shown in Figure 1.23 support this claim.
+
+We see a much higher log error for the pie charts, because they include angles, which can often be underestimated or overestimated, while it is easier to look at bars because they do not include angles.
+
+5. Suppose you have a scatterplot of height on the y-axis vs. weight on the x-axis for people born in Canada, Mexico, and the United States. You now want to explore whether the relationship is different for people born in the United States, people born in Canada, and people born in Mexico. Should you use different shapes to distinguish the three countries or should you use different colours? Explain using either Figure 1.24 or 1.25.
+
+You should use different colours, because the categories are unordered, so you want to distinguish the countries without getting them confused.
+
+6. When might you use the left-side of Figure 1.27 to show the law school data? When might you use the right-side of Figure 1.27 to show the law school data?
+
+You might use the left-side of the figure to show the law school data when you want to focus more in depth on changes specifically the steep decline in 2010. You might use the right-side of the figure to show the law school data when you want to show the viewers how the levels have changed since the data was first collected in 1970.
+
+7. Summary: What are two takeaways from Sections 1.3-1.7?
+
+One takeaway is that bar charts are easier for viewers to interpret, while pie charts often get misinterpreted because of the angles. Another takeaway is that gestalt inferences group together observations, and often take priority over each other.
+
+8. What is one question that you have about the reading?
+
+When would using shapes be helpful in plots? Why not just use colors?
