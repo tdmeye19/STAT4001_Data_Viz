@@ -1,0 +1,54 @@
+---
+title: "Exercises03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Section 8.1.2: General Principles
+
+Pick 1 of the 3 examples (stand your ground, climate change, or covid cases), and summarize why that graphic is not ethical. Make sure to include the context that the graph was created in from Section 8.3 in your explanation.
+
+I chose the climate change graph. That graph is not ethical because it is giving the impression that there is no climate change occuring currently in our world. However, if you look at the scale on the y-axis, you can see that the scale could be made differently which would allow us to see that there is more climate change over time than the graph leads us to believe. Also, there are much more harmful effects of climate change that are a result of an increasing global temperature. This was important because the article was published before the 2016 election, which made more conservative readers believe that the climate change was not significant.
+
+Read the short Section 8.5 of Modern Data Science with R, found here, stopping at Section 8.5.1.
+
+Choose 2 of the 12 principles of ethical practice of data science and come up a (possibly hypothetical) scenario where each of your two chosen principles would come into play.
+
+1. Clearly identify the questions and objectives that drive each project and use to guide both planning and refinement. <- this one is important if you have to present research to the public, and you want them to know precisely what you are researching. Or you could be looking for funding, and need to explain what you want to explore.
+
+2. Protect the privacy and security of individuals represented in our data. <- this one is important in a scenario where someone could be identified easily. Identifiable traits in a pretty small sample size could lead someone to be discovered, and their answers in a survey could lead them to losing their job.
+
+Find a graphic on the Internet that shows evidence that the Covid vaccine has “worked.”
+
+https://theconversation.com/how-effective-are-covid-19-vaccines-heres-what-the-stats-mean-and-what-they-dont-164755 
+
+https://directorsblog.nih.gov/2021/12/14/the-latest-on-the-omicron-variant-and-vaccine-protection/ 
+
+This link has a plot that shows the infected vs protected indivudals who are vaccinated or not, and this shows us that vaccinated individuals are much more protected than those who are not. Also there is another one that shows us the number of antibodies in vaccinated individuals seems to be higher compared to unvaccinated individuals.
+
+Find a graphic on the Internet that shows evidence that the Covid vaccine has “not worked.”
+
+https://www.fox13news.com/news/is-south-africas-omicron-experience-a-guide-to-our-own 
+
+Here it is showing us the spike caused by the Omicron variant, however does not explain or give more information as to show that viruses mutate.
+
+# Section 8.2: Sensitive Data Visualizations
+
+Which of the two visualizations better humanizes the victims of lynching? Why?
+
+I think the second plot better humanizes the victims of lynching, as it shows them as individual points, rather than being on a scale. But this is also tough, because they are just individual points, not people who died.
+
+Suppose that you want to humanize the victims more in a static, non-interactive graph. Brainstorm ways that you could achieve this.
+
+You could achieve this by making it non-interactive, and including a paragraph above the graphic detailing what happens to these individuals. Give some context to how serious it was.
+
+A deeper discussion of these sites appears in this paper. Read the Introduction section on TayTweets and write 3 major takeaways from this section.
+
+OFten technology cannot see the prejudice and hatred that is American racism. You must think about how your data shapes the understanding of the group you are looking at, which might mean lowering the harm possible. Data driven algorithms can be helpful but must be looked at in more depth.
+
+Examine this animated chart. Explain how the chart uses emotion to convey the losses due to gun violence better than, for example, a statement that 11,356 people were killed from gun violence in 2018.
+
+This is using emotion by showing the age of the victims and how many years of potential life were lost because of gun violence.
