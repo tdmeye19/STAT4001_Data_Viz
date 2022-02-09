@@ -1,0 +1,30 @@
+---
+title: "Quiz3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+“All work presented is my own, and I have followed all rules for collaboration.”
+
+Trent Meyer
+
+# Question 1: Consider the Challenger example in our course notes. Clearly, the graphic used to communicate the results is poorly made: it eliminates data points when it really should not. However, the engineers making the graph did not have “malicious intent:” they did not purposefully remove these data points to try to lie: it was a mistake. Is the visualization still unethical? Use principles from the Modern Data Science Readings to explain in a few sentences.
+
+I think that the visualization is unethical, as in principle 9, they should have carefully considered what the implications were in removing these data points. There were human lives at stake, and them removing data points could have led to their deaths. Principle 8 says that they need to present their data in a way that leads others to make informed decisions. They should have included the data points so that others would have seen that temperature is a factor.
+
+# Question 2:  Find a graphic online, other than any given in our course readings, that is unethical. Provide a link to your graphic and give a 2-3 sentence description explaining why that graphic is not ethical.
+
+https://www.relativelyinteresting.com/how-to-mislead-people-with-graphics-that-lie/ 
+
+The first graphic with win percentages is not ethical because the scale is adjusted to make it seem like the Yankees have a higher win percentage compared to the Red Sox. THey should have used a scale starting from 0, which would have shown the difference ethically.
+
+# Question 3: Explain, in your own words, what each of the following Git terms mean:
+
+* commit: committing is like saving the changes in R
+
+* push: pushing is exporting the file from R to Git
+
+* pull: pulling is importing the file from Git to R
