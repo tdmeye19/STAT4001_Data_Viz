@@ -1,0 +1,86 @@
+---
+title: "Exercises04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+```
+
+```{r}
+library(tidyverse)
+hpi_df <- read_csv("data/hpi-tidy.csv")
+```
+
+# Exercise 1: Make a map of a variable of your choosing. In coord_map(), use projection = "mercator", which is also the default (we will see in a later exercise that this probably is not the best choice).
+
+```{r}
+library(maps)
+library(mapproj)
+library(stringr)
+world_df <- ggplot2::map_data("world")
+
+world_stats <- hpi_df %>% mutate(Country = str_to_title(Country))
+world_full <- left_join(world_df, world_stats, by = c("region" = "Country"))
+
+ggplot(data = world_full, aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = LifeExpectancy)) +
+  coord_map(projection = "mercator") +
+  theme_void() +
+  scale_fill_viridis_c()
+```
+
+# Exercise 2: You may notice that the United States does not get coloured in your map. Examine this issue further and fix the map so that the United States is coloured.
+
+```{r}
+hpi_df <- hpi_df %>% mutate(region = fct_recode(Country, USA = "United States of America")) 
+
+world_stats <- hpi_df %>% mutate(Country = str_to_title(Country))
+world_full <- left_join(world_df, world_stats, by = c("region" = "region"))
+
+ggplot(data = world_full, aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = LifeExpectancy)) +
+  coord_map(projection = "mercator") +
+  theme_void() +
+  scale_fill_viridis_c()
+```
+
+# Exercise 3: You may have noticed that there are two horizontal stripes across your map. This is an issue that drove me nuts! Check out this submitted issue on ggplot2’s GitHub page for the reason for the error as well as a fix. Use it to fix your plot.
+
+```{r}
+ggplot(data = world_full, aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = LifeExpectancy)) +
+  coord_map(projection = "mercator", xlim=c(-180,180)) +
+  theme_void() +
+  scale_fill_viridis_c()
+```
+
+I just added the xlim=c(-180,180)) and this fixed the problem.
+
+# Exercise 4: Read about Mercator projections in this blog post. What does this source say about the sizes of Greenland vs. Africa in a Mercator projection
+
+This says that as you get closer to the poles, the country size becomes distorted. It says that Greenland should fit into Africa 14 times.
+
+# Exercise 5: Examine all of the different options for map projection with ?mapproject. Then, change the projection to "globular". Change the projection again to "gilbert". How does the relative size of Greenland to Africa change in the projections?
+
+```{r}
+ggplot(data = world_full, aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = LifeExpectancy)) +
+  coord_map(projection = "mercator", xlim=c(-180,180)) +
+  theme_void() +
+  scale_fill_viridis_c()
+
+ggplot(data = world_full, aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = LifeExpectancy)) +
+  coord_map(projection = "globular", xlim=c(-180,180)) +
+  theme_void() +
+  scale_fill_viridis_c()
+
+ggplot(data = world_full, aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = LifeExpectancy)) +
+  coord_map(projection = "gilbert", xlim=c(-180,180)) +
+  theme_void() +
+  scale_fill_viridis_c()
+```
+
+Changing it to "globular" made all of the countries much smaller, and Greenland is significantly smaller compared to Africa. Changing it to "gilbert" made the countries slightly larger compared to "globular" with Greenland being slightly larger this time, yet smaller than Africa.
