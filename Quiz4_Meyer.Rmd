@@ -1,0 +1,40 @@
+---
+title: "Quiz4_Meyer"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+“All work presented is my own, and I have followed all rules for collaboration.”
+
+Trent Meyer
+
+Use the leaflet package and the us.cities data set from the maps package to make a Zoom-able map of the 50 U.S. capital cities. When you click on a marker for a capital city, both the city name and state as well as the pop (population) should be displayed.
+
+Note that, in the us.cities data set, state capitals are given a value of 2 in the capital variable.
+
+A second note is that if you cannot figure out how to get two “things” (in this case name and population) to display in Leaflet, you would just lose a single point for the quiz (so don’t spend too much time on that part unless you are inclined to do so).
+
+```{r}
+library(leaflet)
+library(maps)
+library(tidyverse)
+uscities <- maps::us.cities
+uscities <- uscities %>% filter(capital == 2)
+
+content <- uscities %>%
+  mutate(popup = paste0('</a>', uscities$name, ' ',
+                        uscities$pop, ' </a>'))
+
+cities_map <- leaflet(uscities) %>%
+  setView(lng = -98.583, lat = 39.833, zoom = 4) %>% 
+  addTiles() %>% 
+  addProviderTiles(providers$Wikimedia) %>% 
+  addMarkers(lng = uscities$long, lat = uscities$lat,
+             clusterOptions = markerClusterOptions(),
+             popup = content$popup)
+cities_map
+```
+
