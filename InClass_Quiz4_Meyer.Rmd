@@ -1,0 +1,38 @@
+---
+title: "InClass_Quiz04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+“All work presented is my own. I have not communicated with or worked with anyone else on this quiz.”
+
+Trent Meyer
+
+# Question 1:  Examine the alcohol.csv data set that you may have used as an introductory data set in STAT/DATA 234:
+
+```{r}
+library(tidyverse)
+library(here)
+alcohol_df <- read_csv(here("data/alcohol.csv"))
+```
+
+Construct a map of the beer_servings variable. You should choose an appropriate projection and change the default colour scheme of your map.
+
+```{r}
+world_df <- ggplot2::map_data("world")
+
+world_full <- left_join(world_df, alcohol_df, by = c("region" = "country"))
+
+ggplot(data = world_full, aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = total_litres_of_pure_alcohol)) +
+  coord_map(projection = "gilbert", xlim=c(-180,180)) +
+  theme_void() +
+  scale_fill_distiller(type = "seq", direction = 1)
+```
+
+# Question 2: Give an example of a question of interest about the alcohol data where you would want to construct a visualization other than a map to answer the question. What type of visualization would you construct instead?
+
+An example would be if we were asking "what is the trend of total_litres_of_pure_alcohol in European countries over time?" If we had the data over many years, we could instead use a faceted scatterplot with each year having its own plot. We could also plot one countries' data on a scatterplot, and have a grid of six or so countries to compare and see how their total alcohol changes over a time.
