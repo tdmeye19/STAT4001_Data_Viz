@@ -1,0 +1,20 @@
+---
+title: "Exercises05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Exercise 1: What makes the app given in the first tab interactive? In other words, what is a user allowed to change in the app?
+
+The user is allowed to use the sliders to change the slope, intercept, sd of the residuals and the n.
+
+# Excerise 2: What are the outputs of the app? Are the outputs graphs, tables, or both?
+
+The output of the app is a graph and a table.
+
+# Excercise 3: Write a short one paragraph description about the app you selected, including what the app allows the user to change, what the output is, and one interesting thing you found in the app.
+
+The app I selected was the "Covid 19 tracker" app that looks at Covid-19 data for countries. First, we can hover over a country to see confirmed cases and deaths, also in terms of millions. The user can change the mapping date to see how a country was affected at a certain date. The output is a plot with the number of new cases weekly, and another with the cumulative number of cases. The map gives a scale that bins the number of deaths per million for each country and assigns a color. One thing I found interesting was that in February 2020 there were only 33 countries affected, while in March 2020 there were 101 countries affected!
