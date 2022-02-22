@@ -1,0 +1,63 @@
+---
+title: "Quiz5_Meyer"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+“All work presented is my own, and I have followed all rules for collaboration.”
+
+Trent Meyer
+
+```{r}
+library(tidyverse)
+statsurvey_df <- read_csv("data/stat113_survey.csv")
+```
+
+# Question 1: Construct a graph that uses the number of Facebook friends each student has.
+
+```{r}
+stat_question1 <- statsurvey_df %>% filter(!is.na(Facebook)) %>%
+  group_by(time_both) %>%
+  summarise(meanfacebook = mean(Facebook),
+            sd = sd(Facebook),
+            count = n()) %>%
+  mutate(se = sd / sqrt(count),
+         u_se = meanfacebook + se,
+         l_se = meanfacebook - se)
+
+stat_question1 <- stat_question1 %>% separate(time_both, into = c("semester", "year"),
+                               sep = 1) %>%
+  arrange(year, desc(semester)) %>%
+  unite(col = "time_both", c(semester, year)) %>%
+  mutate(time_both = fct_inorder(time_both))
+
+
+ggplot(data = stat_question1, aes(x = time_both, y = meanfacebook)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = l_se, ymax = u_se)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  
+```
+
+# Question 2: Construct a graph that uses the proportion of students that have Facebook (assuming that 0 friends means that the student does not have a Facebook account and more than 0 friends means that the student does have a Facebook account).
+
+```{r}
+stat_question2 <- statsurvey_df %>% filter(!is.na(Facebook)) %>%
+  mutate(iffacebook = if_else(Facebook == 0,
+                              "No",
+                              "Yes")) 
+
+stat_question2 <- stat_question2 %>% separate(time_both, into = c("semester", "year"),
+                               sep = 1) %>%
+  arrange(year, desc(semester)) %>%
+  unite(col = "time_both", c(semester, year)) %>%
+  mutate(time_both = fct_inorder(time_both))
+
+ggplot(data = stat_question2, aes(x = time_both, fill = iffacebook)) +
+  geom_bar(position = "fill") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
