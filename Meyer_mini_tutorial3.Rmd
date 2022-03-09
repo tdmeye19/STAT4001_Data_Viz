@@ -1,0 +1,67 @@
+---
+title: "Mini Tutorial 3"
+author: "Trent Meyer"
+date: "03/08/2022"
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+“All work presented is my own. I have not communicated with or worked with anyone else on this exam.”
+
+Trent Meyer
+
+Incorporating Data Variability in Graphs
+
+(4 points) An introductory statement with the goal of the section (in your own words) and a brief description of the data set and variables you will be using.
+
+The data I will be using is athletes_full, which looks at the top 100 paid athletes in the world, while giving the totalpay, gender, sport, along with their name and age. We will be looking at these variables, where totalpay is how much they are paid, and sport is the sport they are an athlete in. Name, age, and gender are just some demographics.
+
+```{r}
+library(tidyverse)
+athletes_full <- read_csv("data/athletesdata.csv")
+
+ggplot(data = athletes_full, aes(x = Gender)) +
+  geom_bar()
+```
+
+This bar plot does not show any variability. Rather, it shows a count of each group, one bar for male and one bar for female. This plot is okay for showing counts, however if you wanted to show more variability there are multiple options.
+
+Bar plots are not great at showing variablity, however, you can use bar plots to show counts. It is very important to realize situations when to, and when not to, use bar plots. 
+
+Here are some examples of how to use boxplots and plotting the mean to show variability in a plot:
+
+First, you could use a side-by-side boxplot, which would have a boxplot for each group. This would show the IQR and mean, rather than just giving a total.
+
+```{r}
+ggplot(data = athletes_full, aes(x = Sport, y = totalpay)) +
+  geom_boxplot()
+```
+
+This plot is great because you can see how much variability there is in one group, here in one sport. You can see that there is a lot of variability in Golf total pay, while in Baseball there is very little variability. 
+
+Another way you can show variability is by marking the mean in a different color. 
+
+```{r}
+athletes_mean <- athletes_full %>% group_by(Sport) %>%
+  summarise(meantotalpay = mean(totalpay)) %>%
+  ungroup() %>%
+  arrange(meantotalpay) %>% 
+  mutate(Sport = fct_inorder(Sport)) ## my fct_reorder and fct_inorder would not work
+
+ggplot(data = athletes_full, aes(x = Sport, y = totalpay)) +
+  geom_point(alpha = 0.4) + 
+  geom_point(data = athletes_mean, aes(y = meantotalpay),
+             colour = "red") + 
+  coord_flip()
+```
+
+The plot above is showing the meantotalpay for each sport in red, so that it stands out. We grouped together the athletes by the Sport they play, and then took the mean for each Sport. As you can see some Sports have more athletes in this data set, such as basketball and football. However, there are some sports like Boxing and Golf that still have a relatively high mean, while have less athletes in this data set. You can then see where the other points fall in relation to the mean, and if there are any points with high influence, possible outlier situation.
+
+Using plots with the mean, and boxplots to show variability is very helpful in showing your audience how much a variable varies within a certain group. Again, a barplot would be helpful to show just a count, but it would not show any variablity.
+

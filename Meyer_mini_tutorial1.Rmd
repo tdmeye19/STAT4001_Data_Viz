@@ -1,0 +1,118 @@
+---
+title: "Mini Tutorial 1"
+author: "Trent Meyer"
+date: "03/08/2022"
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+“All work presented is my own. I have not communicated with or worked with anyone else on this exam.”
+
+Trent Meyer
+
+
+```{r}
+library(tidyverse)
+pokemon_full <- read_csv("data/pokemon_full.csv")
+```
+
+(4 points) An introductory statement with the goal of the section (in your own words) and a brief description of the data set and variables you will be using.
+
+This section will be looking at the seven grammar of graphics, along with "". The pokemon_df data set is looking at Generation 1 through 6 Pokemon, and their attacking/defending stats along with a few other quantitative variables. In this section we will be looking specifically at HP, the number of hitpoints they have, or health remaining, and Attack, which rates their attack. A higher HP means they can take more hitpoints, while a higher Attack means they can deal more damage with their attack. Also, we will use Type which consists of 18 groups that the Pokemon are put into which determines some strengths and weaknesses. Legendary is whether or not the Pokemon is legendary, false meaning it is not legendary. Generation is numbered 1-6, and tells us which generation the pokemon is from.
+
+(16 points) R code chunks interspersed with some text descriptions about the code you have written and with text description about each topic. All three topics should have some R code. The data you use can be real data or it can be “toy” data (generated from tibble()).
+
+# Grammar of Graphics
+
+Grammar of graphics allows us to explicitly explain what each aspect of a plot means. There are seven grammar of graphics: 
+
+* data: the data set you are using in the plot
+* mappings: the variables you are using in the plot
+* geom_function: what type of plot you want to make
+* stat: any statistical transformation you want to add (ex. adding a smoother)
+* position: an adjustment to change where certain observations are (ex. position = "dodge")
+* facet_function: allows you to make multiple plots based on a categorical variable
+* coordinate_function: allows you to change from a basic Cartesian coordinate system to a different coordindate system, or alter the aspects of the coordinate system you are using. 
+
+Data, Mappings, Geom, Stat, Facet_function
+```{r}
+ggplot(data = pokemon_full, aes(x = Attack, y = HP)) +
+  geom_point() +
+  stat_smooth() +
+  facet_wrap(~Type) +
+  scale_fill_brewer(palette = "Dark2")
+```
+
+The grammar of graphics for the above plot are:
+
+* data: pokemon_full (the data set we are using)
+* mappings: x = Attack, y = HP (the variables we are plotting)
+* geom: geom_point (using a scatterplot to map two quantitative variables)
+* stat: stat_smooth (creates a smoother)
+* facet_function: facet_wrap (creates subplots based on their Type)
+
+Position, coord_function
+```{r}
+ggplot(data = pokemon_full, aes(x = Type, fill = Legendary)) +
+  geom_bar(position = "dodge") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  coord_flip() +
+  scale_fill_brewer(palette = "Dark2")
+```
+
+The grammar of graphics for the above plot are:
+
+* data: pokemon_full (the data set we are using)
+* mappings: x = Attack, y = HP (the variables we are plotting)
+* geom: geom_point (using a scatterplot to map two quantitative variables)
+* position: position = dodge (uses whether or not a Pokemon is Legendary, and creates a side-by-side bar plot)
+* coord_function: coord_flip() (flips the x and y axis)
+
+# Topics from Readings:
+
+## Stable Baselines for Relative Comparisons (Healy’s Data Visualization: A Practical Introduction, 1.2.3)
+
+When you are trying to make relative comparisons for data, it might seem like an easy solution to use a stacked barplot, with each of the groups stacked on top of each other. One of the main issues is that it is easy to compare the group that is touching the x-axis, however every other group does not have a baseline that makes for easy comparison. Each group within the category starts at a different point, so we cannot visualize and compare between groups.
+
+```{r}
+ggplot(data = pokemon_full, aes(x = Generation, fill = Legendary)) +
+  geom_bar(position = "stack") +
+  scale_fill_viridis_d()
+```
+
+This plot is an example of not having a stable baseline. It is difficult to make comparisons between Pokemon in Generations, who are not Legendary. A better example of making this comparison would be:
+
+```{r}
+ggplot(data = pokemon_full, aes(x = Generation, fill = Legendary)) +
+  geom_bar(position = "dodge") +
+  scale_fill_viridis_d()
+```
+
+Here we are able to make comparisons because there is a stable baseline for making comparisons between groups and levels.
+
+## Should you Choose a Color or Shape to Distinguish Between Groups?
+
+Choosing whether to use shapes or colors to distinguish between groups is a tricky subject. Typically, it is better to use one or the other, and not use both shapes and colors to distinguish between groups on a scatterplot. If the groups' observations are very close together, it can be difficult to tell which group falls into which. 
+
+When the points are very close together, it is difficult to see the differences in shapes, as seen below.
+```{r}
+ggplot(data = pokemon_full, aes(x = HP, y = Attack, shape = Legendary)) +
+  geom_point() +
+  scale_colour_brewer(palette = "Dark2")
+```
+
+Using color to distinguish Legendary or not is easier to see, compared to using shapes.
+```{r}
+ggplot(data = pokemon_full, aes(x = HP, y = Attack, colour = Legendary)) +
+  geom_point() +
+  scale_colour_brewer(palette = "Dark2")
+```
+
+It is completely circumstantial whether to use colors or shapes. It is important to look at the data on a scatterplot, and a good idea to test both colors and shapes to see which one shows the difference (or lack of) between groups. 
+

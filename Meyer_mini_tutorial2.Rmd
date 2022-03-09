@@ -1,0 +1,64 @@
+---
+title: "Mini Tutorial 2"
+author: "Trent Meyer"
+date: "03/08/2022"
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+“All work presented is my own. I have not communicated with or worked with anyone else on this exam.”
+
+Trent Meyer
+
+
+(4 points) An introductory statement with the goal of the section (in your own words) and a brief description of the data set and variables you will be using.
+
+The goal of this section is to introduce the concept of mapping in R. I will be focusing on mapping using the "maps" package. The data set I am using is from map_data, and then I filtered the states to get just New York. The variables I will be using are long (which is the longitude), lat (which is the latitude). Also, I will be using region, which in this case is the state, and subregion, which is an area/region of the state. Not every region has subregions however.
+
+(11 points) R code chunks interspersed with some text descriptions about the code you have written and with text description about each topic. If you are using the maps package, you should use a map other than the U.S. States Map or World Map that we used in class.
+
+```{r}
+library(maps)
+library(tidyverse)
+```
+
+This chunk above has the two libraries, maps and tidyverse, that are needed to map on R. Tidyverse is necessary as it allows you to use dplyr and all of the other important tools needed to manipulate data.
+
+```{r}
+state_df <- ggplot2::map_data("state")
+```
+
+Line 34 is creating a dataframe with all of the coordinates for each of the states (regions), along with their subregions if they have any.
+
+```{r}
+ny_df <- state_df %>% 
+  filter(region == "new york")
+```
+
+The chunk above is filtering for NY, in order to look specifically at New York state instead of the whole USA. 
+
+```{r}
+ggplot(data = ny_df, aes(x = long, y = lat, group = subregion)) +
+  geom_polygon(colour = "black", fill = "white")
+```
+
+Then, in the above chunk, we are using the coordinates to create a polygon that represents the map of New York state. The polygon/map is filled in without counties or cities, and just gives us a blank map of the state (to get it filled in, we would need to change the fill to have it be a different color). 
+
+```{r}
+ggplot(data = ny_df, aes(x = long, y = lat, group = subregion)) +
+  geom_polygon(colour = "black", aes(fill = subregion))
+```
+
+The chunk above shows us how to color by a specific subregion. The "aes(fill = subregion)" argument allows us to fill in the specific subregions in the data with different colors. This allows us to see where the different regions of the state are.
+
+Conclusion: This is a very basic example of mapping, however mapping gets very confusing quickly. Often times, you must combine data sets which need to be manipulated first, and it can get very messy. 
+
+There are multiple positive aspects of mapping that can be interactive. To make an interactive plot, you can use the library "leaflet" to interact with the different areas. The data set used above could use leaflet to allow the user to hover over a subregion and see its name.
+
+To see the possible maps you can using the maps library, you can check out: "https://cran.r-project.org/web/packages/maps/maps.pdf" 

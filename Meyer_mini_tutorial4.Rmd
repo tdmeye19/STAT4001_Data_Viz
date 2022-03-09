@@ -1,0 +1,80 @@
+---
+title: "Mini Tutorial 4"
+author: "Trent Meyer"
+date: "03/08/2022"
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+(4 points) An introductory statement with the goal of the section (in your own words) and a brief description of the data set and variables you will be using.
+
+This section will be going over Shiny apps and their components. Also, I will introduce the concept of reactivity in a Shiny app. I am using the world_data (hpi-tidy.csv), which has 11 variables for each nation in the world. It has HPIRank which is the happiness person index, and ranks happiness in that nation. Also, you can see LifeExpectancy, Population, and a few other variables related to the country's productivity and happiness. Nation is just the specific nation, which will be used as an input in this app to create a table.
+
+```{r}
+library(tidyverse)
+library(shiny)
+world_data <- read_csv("data/hpi-tidy.csv")
+world_data <- world_data %>% filter(HPIRank <= 20)
+```
+
+This code above loads in the shiny app library, which is needed to make a shiny app
+
+# Clicking the snippet will give you the skeleton with three parts:
+1. ui (user interface): what the user inputs
+2. server: what changes behind the scenes
+3. shinyApp(ui, server): what the user sees after they make their input
+
+```{r}
+ui <- fluidPage(
+  sidebarLayout(sidebarPanel(
+      selectizeInput("nation", label = "Choose a Nation",
+                     choices = levels(factor(world_data$Country)),
+                     multiple = FALSE),
+      actionButton("runappbutton", label = "Update Table")),
+    mainPanel(tableOutput(outputId = "nationtable"))
+  )
+)
+```
+
+The ui has some main parts related to format:
+
+* First it has the fluidPage(), which sets up the format of the app
+* Inside of fluidPage(), there is sidebarLayout() and sidebarPanel() which allow you to put things into a panel that is distinguishable from the main body of the app
+
+Also, the ui asks for the user to input some data. There are many ways to allow the user to input data, but I will focus on 1. selectizeInput() makes a dropdown list that you can choose from. You need to create an inputID that can be referred to later, create a phrase prompting the user to choose something, and then use "your data set"$"variable you want them to choose from". This will allow them in this app to choose a country from the data set, and we set multiple to FALSE meaning they can only select one option.
+
+Finally, in the mainPanel(), you specify what will be in the panel, in this case we use tableOutput because we are making a table. Then you will create an outputId to refer to later.
+
+The actionButton() allows the user to make their selection first, and then clicking the button loads the table of the country they input. This is easier to let the user see what they are inputting, and allowing them to check before running it and save time.
+
+```{r}
+server <- function(input, output, session) {
+  
+    nation_react <-  eventReactive(input$runappbutton, {
+    world_data %>% filter(Country %in% input$nation)
+  })
+  
+  output$nationtable <- renderTable({
+    
+    table(nation_react())
+  }
+  )
+  
+}
+```
+
+The server basically takes the input the user made, and then does whatever you specify. There is a thing called REACTIVITY, where you can create a function that will change how you are filtering based on what the user inputs. It saves the time of having many if-statements, and allows the app to be much faster and efficient. 
+
+The nation_react() function is filtering by the Country the user chose. Then we use output$nationtable along with renderTable({}) to create a table. These steps are necessary in order to create the output, and we must use the function nation_react if we want reactivity. We used the outputId from earlier to refer to the table that we want in the main panel for output.
+
+```{r}
+shinyApp(ui, server)
+```
+
+This last part will run our app using the ui and server we made above!
